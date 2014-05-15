@@ -1,4 +1,5 @@
 hello-octapus
 =============
 
-A helloworld repository
+A helloworld repository. 
+I use this only for testing purposes!
