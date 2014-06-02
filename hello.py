@@ -1,3 +1,4 @@
 
-print "Hello, World (here)"
+print "Hello, World"
 
+exit()
