@@ -1,4 +1,8 @@
-'''The classic hello-world example in Python'''
+'''
+The classic hello-world example in Python
+'''
+
+import sys
 
 print "Hello, World"
 
