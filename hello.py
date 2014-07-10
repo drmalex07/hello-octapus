@@ -4,6 +4,6 @@ A hello-world example in Python
 
 import sys
 
-print "Hello, World"
+print "Hello, Python World"
 
 exit()
