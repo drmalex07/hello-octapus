@@ -1,5 +1,5 @@
 '''
-The classic hello-world example in Python
+A hello-world example in Python
 '''
 
 import sys
