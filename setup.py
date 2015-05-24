@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3a'
+version = '0.3b'
 
 setup(name='hello-octapus',
       version=version,
       description="Notin",
       long_description="""""",
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
-      keywords='nothingness helloworld',
+      keywords='nothingness hello-world',
       author='Michail Alexakis',
       author_email='',
       url='',
@@ -23,5 +23,7 @@ setup(name='hello-octapus',
       ],
       entry_points="""
       # -*- Entry points: -*-
+      
+      [hello_octapus.plugins]
       """,
       )
