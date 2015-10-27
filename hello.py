@@ -1,7 +1,3 @@
+'''The all-time classic hello-world example in Python
 '''
-The all-time classic hello-world example in Python
-'''
-
-import sys
-
-print "Hello, (Python) World!!!!!!!!!"
+print "Hello, (Python) World!"
