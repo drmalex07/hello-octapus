@@ -8,6 +8,8 @@ services:
 before_script:
   - psql -c "CREATE USER tester PASSWORD 'tester'" -U postgres
   - psql -c "CREATE DATABASE hello_octapus OWNER tester" -U postgres
+  - psql -c "CREATE EXTENSION postgis" -U postgres hello_octapus
+  - psql -c "CREATE TABLE octapus(id integer, friendly_name varchar(80))" -U tester hello_octapus
 
 # command to install dependencies
 install:
@@ -18,4 +20,5 @@ install:
 script:
   - python test-1.py
   - bash test-2.sh
-  - psql -c "SELECT now()" -U tester hello_octapus
+  - psql -c "SELECT user" -U tester hello_octapus
+  - psql -c '\d' -U tester hello_octapus
