@@ -5,6 +5,9 @@ python:
 services:
   - postgresql
 
+addons:
+  postgresql: "9.4"
+
 before_script:
   - psql -c "CREATE USER tester PASSWORD 'tester'" -U postgres
   - psql -c "CREATE DATABASE hello_octapus OWNER tester" -U postgres
