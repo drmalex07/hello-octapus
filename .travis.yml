@@ -35,7 +35,7 @@ script:
 - bash env-dump.sh
 
 - mvn verify
-- java -jar target/hello-octapus-${ARTIFACT_VERSION}.jar
+- java -jar "target/hello-octapus-${ARTIFACT_VERSION}.jar"
 
 - psql -c "SELECT user" -U tester hello_octapus
 - psql -c '\d' -U tester hello_octapus
