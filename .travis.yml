@@ -26,6 +26,7 @@ install:
 script:
 - python test-1.py
 - bash env-dump.sh
+- echo "A secret thing is: ${SECRET_THING}"
 - psql -c "SELECT user" -U tester hello_octapus
 - psql -c '\d' -U tester hello_octapus
 - psql -c 'SELECT * FROM octapus' -U tester hello_octapus
