@@ -5,7 +5,7 @@ jdk:
 
 env:
   global:
-   - ARTIFACT_VERSION=0.1-SNAPSHOT
+   - ARTIFACT_VERSION=1.0-SNAPSHOT
   matrix:
    - FOO=foo1 BAZ=baz1
 
@@ -35,7 +35,7 @@ script:
 - bash env-dump.sh
 
 - mvn verify
-- java -jar "target/hello-octapus-${ARTIFACT_VERSION}.jar"
+- ./run-example.sh 
 
 - psql -c "SELECT user" -U tester hello_octapus
 - psql -c '\d' -U tester hello_octapus
