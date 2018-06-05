@@ -5,6 +5,7 @@ jdk:
 
 env:
   global:
+   - ARTIFACT_VERSION=0.1-SNAPSHOT
   matrix:
    - FOO=foo1 BAZ=baz1
 
@@ -28,12 +29,14 @@ before_script:
 - psql -f scripts/db/init.sql -U tester hello_octapus
 
 install:
-- mvn install
+- mvn install shade:shade
 
 script:
 - bash env-dump.sh
+
 - mvn verify
-- java -jar target/hello-octapus-1.0-SNAPSHOT.jar
+- java -jar target/hello-octapus-${ARTIFACT_VERSION}.jar
+
 - psql -c "SELECT user" -U tester hello_octapus
 - psql -c '\d' -U tester hello_octapus
 - psql -c 'SELECT * FROM octapus' -U tester hello_octapus

@@ -52,8 +52,6 @@
          <configuration>
            <archive>
              <manifest>
-               <addClasspath>true</addClasspath>
-               <classpathPrefix>lib/</classpathPrefix>
                <mainClass>acme.App</mainClass>
              </manifest>
            </archive>
