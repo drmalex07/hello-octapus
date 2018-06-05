@@ -1,8 +1,15 @@
 #!/bin/bash
 
+#
+# Dump
+#
+
 echo " -- Env --"
 env
 echo " --"
 
-echo "A secret thing is: ${SECRET_THING}" 
+#
+# Use secret from environment to decode something
+#
 
+openssl enc -des-ecb -d -in 1.txt.enc -k ${SECRET_THING}
