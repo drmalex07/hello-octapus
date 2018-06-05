@@ -28,12 +28,11 @@ before_script:
 - psql -f scripts/db/init.sql -U tester hello_octapus
 
 install:
-- pip install -r requirements.txt
+- mvn install
 
 script:
-- java -version
 - bash env-dump.sh
-- mvn package
+- mvn verify
 - java -jar target/hello-octapus-1.0-SNAPSHOT.jar
 - psql -c "SELECT user" -U tester hello_octapus
 - psql -c '\d' -U tester hello_octapus
