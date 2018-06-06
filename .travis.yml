@@ -13,6 +13,9 @@ cache:
   directories:
   - "$HOME/.m2"
 
+# needed for docker service
+sudo: required
+
 services:
 - postgresql
 - docker
