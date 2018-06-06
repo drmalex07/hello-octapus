@@ -37,6 +37,7 @@ install:
 
 script:
 - bash env-dump.sh
+- (cd resources && ls -hal)
 
 - mvn verify
 - ./run-example.sh 
