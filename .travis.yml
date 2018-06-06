@@ -33,13 +33,16 @@ before_script:
 - psql -f scripts/db/init.sql -U tester hello_octapus
 
 install:
-- mvn install shade:shade
+- mvn dependency:resolve
 
 script:
+- set -e
 - bash env-dump.sh
 - (cd resources && ls -hal)
+- /bin/false
 
 - mvn verify
+- mvn install shade:shade
 - ./run-example.sh 
 
 - psql -h localhost -c "SELECT user" -U tester hello_octapus
