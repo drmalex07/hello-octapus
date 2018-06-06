@@ -39,7 +39,6 @@ script:
 - set -e
 - bash env-dump.sh
 - (cd resources && ls -hal)
-- /bin/false
 
 - mvn verify
 - mvn install shade:shade
