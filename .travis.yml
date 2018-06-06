@@ -15,6 +15,7 @@ cache:
 
 services:
 - postgresql
+- docker
 
 addons:
   postgresql: '9.5'
@@ -37,7 +38,10 @@ script:
 - mvn verify
 - ./run-example.sh 
 
-- psql -c "SELECT user" -U tester hello_octapus
-- psql -c '\d' -U tester hello_octapus
-- psql -c 'SELECT * FROM octapus' -U tester hello_octapus
+- psql -h localhost -c "SELECT user" -U tester hello_octapus
+- psql -h localhost -c '\d' -U tester hello_octapus
+- psql -h localhost -c 'SELECT * FROM octapus' -U tester hello_octapus
+
+- ./build-docker-image.sh
+- ./run-example-container.sh
 
