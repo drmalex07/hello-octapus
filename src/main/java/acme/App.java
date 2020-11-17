@@ -7,9 +7,9 @@ import java.util.Scanner;
 
 import org.joda.time.DateTime;
 
+
 /**
  * Hello world!
- *
  */
 public class App 
 {
@@ -19,7 +19,7 @@ public class App
         System.err.println("Hello World (at " + d.toString() + ")!");
         
         for (String path: Arrays.asList("/samples/1.csv", "/hello.txt")) {
-            System.err.printf(" -- Contents of classpath:%s -- %n", path);
+            System.err.printf(" -- classpath:%s -- %n", path);
             try (Scanner in = new Scanner(App.class.getResourceAsStream(path))) {
                 while (in.hasNextLine())
                     System.err.println(in.nextLine());
