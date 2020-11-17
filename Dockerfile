@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM maven:3.6.3-openjdk-8 AS maven
 
 ARG VERSION
 ENV VERSION ${VERSION}
@@ -6,7 +6,24 @@ ENV VERSION ${VERSION}
 RUN mkdir /usr/local/hello-octapus
 WORKDIR /usr/local/hello-octapus
 
-COPY target/hello-octapus-${VERSION}.jar ./
-COPY docker-entrypoint.sh ./
+COPY pom.xml ./
+COPY src ./src
+COPY resources/ ./resources
+RUN mvn dependency:go-offline
 
-CMD ["./docker-entrypoint.sh"]
+RUN mvn package shade:shade
+RUN ls -hal target 
+
+
+FROM openjdk:8-jre-alpine
+
+ARG VERSION
+ENV VERSION ${VERSION}
+
+RUN mkdir /usr/local/hello-octapus
+WORKDIR /usr/local/hello-octapus
+
+COPY --from=maven /usr/local/hello-octapus/target/hello-octapus-${VERSION}.jar ./
+COPY docker-command.sh ./
+
+CMD ["./docker-command.sh"]
