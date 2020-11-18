@@ -25,9 +25,16 @@ steps:
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
 
-# Todo
-## A step that builds the Docker image
-## see https://docs.drone.io/plugins/popular/docker/
-#- name: docker-build
-#  image: plugins/docker
 
+# A step that builds the Docker image
+# see https://docs.drone.io/plugins/popular/docker/
+- name: docker-build
+  image: plugins/docker
+  when:
+    event:
+    - tag
+  settings:
+    repo: local/hello-octapus
+    auto_tag: true
+    build_args:
+    - VERSION=${DRONE_TAG}
