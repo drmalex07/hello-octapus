@@ -5,6 +5,10 @@ name: default
 steps:
 - name: greeting
   image: busybox:1.32
+  environment:
+    db_user: admin
+    db_pass:
+      from_secret: db-password
   commands:
   - echo Hello World
   - ls -hal
@@ -12,6 +16,7 @@ steps:
   # https://docs.drone.io/pipeline/environment/reference/
   - env
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
+
  
 trigger:
   event:
