@@ -34,7 +34,10 @@ steps:
     event:
     - tag
   settings:
-    repo: local/hello-octapus
-    auto_tag: true
+    registry: registry-dev-1-opertusmundi:30474
+    repo: registry-dev-1-opertusmundi:30474/hello-octapus
+    tags:
+    - latest
+    - ${DRONE_TAG}
     build_args:
     - VERSION=${DRONE_TAG}
