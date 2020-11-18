@@ -7,3 +7,4 @@ steps:
   image: busybox:1.32
   commands:
   - echo Hello World
+  - ls -hal
