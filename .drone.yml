@@ -6,17 +6,17 @@ steps:
 - name: greeting
   image: busybox:1.32
   environment:
-    db_user: admin
-    db_pass:
+    DB_USER: admin
+    DB_PASS:
       from_secret: db-password
   commands:
   - echo Hello World
   - ls -hal
   - pwd
   # https://docs.drone.io/pipeline/environment/reference/
-  - env
+  #- env
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
-  - echo db-user=${db_user} db-pass=${db_pass}
+  - echo db-user=${DB_USER} db-pass=${DB_PASS}
 
  
 trigger:
