@@ -1,0 +1,9 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: greeting
+  image: busybox:1.32
+  commands:
+  - echo Hello World
