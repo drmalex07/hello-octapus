@@ -8,3 +8,9 @@ steps:
   commands:
   - echo Hello World
   - ls -hal
+  - pwd
+ 
+trigger:
+  event:
+  - push
+
