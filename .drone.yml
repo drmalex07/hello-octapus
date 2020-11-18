@@ -33,6 +33,10 @@ steps:
   when:
     event:
     - tag
+  # Todo
+  #environment:
+  #  REGISTRY_ADDRESS:
+  #    from_secret: registry_address
   settings:
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
