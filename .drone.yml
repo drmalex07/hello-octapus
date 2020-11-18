@@ -9,6 +9,8 @@ steps:
   - echo Hello World
   - ls -hal
   - pwd
+  - git branch -va
+  - git log --oneline 
  
 trigger:
   event:
