@@ -12,5 +12,6 @@ steps:
  
 trigger:
   event:
-  - push
+  #- push
+  - tag
 
