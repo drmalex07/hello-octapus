@@ -3,8 +3,14 @@ type: docker
 name: default
 
 steps:
+
+# A generic step (commands executed inside a container)
 - name: greeting
   image: busybox:1.32
+  when:
+    event:
+    - push
+    - tag
   environment:
     DB_USER: admin
     DB_PASS:
@@ -19,9 +25,9 @@ steps:
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
 
- 
-trigger:
-  event:
-  - push
-  - tag
+# Todo
+## A step that builds the Docker image
+## see https://docs.drone.io/plugins/popular/docker/
+#- name: docker-build
+#  image: plugins/docker
 
