@@ -5,7 +5,7 @@
   <groupId>com.example</groupId>
   <artifactId>hello-octapus</artifactId>
   <packaging>jar</packaging>
-  <version>1.7.5</version>
+  <version>1.7.6</version>
   <name>hello-octapus</name>
   
   <url>http://maven.apache.org</url>
@@ -57,28 +57,6 @@
            </archive>
          </configuration>
       </plugin>
-
-      <!-- Copy external deps under lib/ inside build directory -->  
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <!--<phase>package</phase>-->
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/lib</outputDirectory>
-              <overWriteReleases>false</overWriteReleases>
-              <overWriteSnapshots>false</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>     
 
       <!-- Copy additional resources under target directory -->  
       <plugin>
