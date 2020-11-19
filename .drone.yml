@@ -6,7 +6,7 @@ name: default
 steps:
 
 # A generic step (commands executed inside a container)
-- name: greeting
+- name: greeting-1
   image: busybox:1.32
   when:
     event:
@@ -28,6 +28,18 @@ steps:
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
+
+
+# Another generic step (the workspace from previous step is preserved!)
+- name: greeting-1
+  image: busybox:1.32
+  when:
+    event:
+    - push
+    - tag
+  commands:
+  - ls -hal .
+  - cat hello.txt
 
 
 # A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
@@ -52,6 +64,7 @@ steps:
     build_args:
     - VERSION=${DRONE_TAG}
 
+
 # The following step is only be executed if a successful build is promoted to target "staging"
 - name: staging-demo
   image: busybox:1.32
@@ -64,3 +77,5 @@ steps:
   - echo Hello (staging) World
   - ls -hal .
   - env
+
+
