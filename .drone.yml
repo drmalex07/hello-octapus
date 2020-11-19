@@ -47,9 +47,9 @@ steps:
   #environment:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
-  volumes:
-  - name: docker-certs
-    path: /etc/docker/certs.d/
+  #volumes:
+  #- name: docker-certs
+  #  path: /etc/docker/certs.d/
   #environment:
   #  PASSWORD:
   #    from_secret: registry_password
@@ -60,6 +60,7 @@ steps:
       from_secret: registry_password
     # Fixme 
     custom_dns: 10.0.12.60
+    insecure: true
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
