@@ -3,11 +3,6 @@ type: docker
 name: default
 
 
-#volumes:
-#- name: docker-certs
-#  host:
-#    path: /etc/docker/certs.d/
-
 steps:
 
 # A generic step (commands executed inside a container)
@@ -35,24 +30,12 @@ steps:
   - ./echo-secrets.sh
 
 
-# A step that builds the Docker image
-# see https://docs.drone.io/plugins/popular/docker/
+# A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
 - name: docker-build
   image: plugins/docker
   when:
     event:
-    - push
     - tag
-  # Todo
-  #environment:
-  #  REGISTRY_ADDRESS:
-  #    from_secret: registry_address
-  #volumes:
-  #- name: docker-certs
-  #  path: /etc/docker/certs.d/
-  #environment:
-  #  PASSWORD:
-  #    from_secret: registry_password
   settings:
     debug: true
     username: user
@@ -60,12 +43,10 @@ steps:
       from_secret: registry_password
     # Fixme 
     custom_dns: 10.0.12.60
-    #insecure: true
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
-    - '1.7'
-    #- ${DRONE_TAG}
+    - '1'
+    - ${DRONE_TAG}
     build_args:
-    - VERSION=1.7
-    #- VERSION=${DRONE_TAG}
+    - VERSION=${DRONE_TAG}
