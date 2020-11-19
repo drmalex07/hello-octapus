@@ -19,7 +19,7 @@ steps:
     REGISTRY_PASSWORD:
       from_secret: registry_password
   commands:
-  - echo Hello World
+  - echo Hello World > hello.txt
   - ls -hal .
   - ls -R -hal /etc/docker/certs.d
   - pwd
@@ -47,7 +47,20 @@ steps:
     repo: |-
       ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
     tags:
-    - '1'
+    - ${DRONE_SEMVER_MAJOR}
     - ${DRONE_TAG}
     build_args:
     - VERSION=${DRONE_TAG}
+
+# The following step is only be executed if a successful build is promoted to target "staging"
+- name: staging-demo
+  image: busybox:1.32
+  when:
+    event:
+    - promote
+    target:
+    - staging
+  commands:
+  - echo Hello (staging) World
+  - ls -hal .
+  - env
