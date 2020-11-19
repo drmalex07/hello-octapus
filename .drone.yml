@@ -15,6 +15,10 @@ steps:
     DB_USER: admin
     DB_PASS:
       from_secret: db-password
+    REGISTRY_USERNAME:
+      from_secret: registry-username
+    REGISTRY_PASSWORD:
+      from_secret: registry-password
   commands:
   - echo Hello World
   - ls -hal
@@ -38,10 +42,10 @@ steps:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
   settings:
-    username:
-      from_secret: registry-username
-    password:
-      from_secret: registry-password
+    #username:
+    #  from_secret: registry-username
+    #password:
+    #  from_secret: registry-password
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
