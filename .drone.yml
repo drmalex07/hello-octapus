@@ -41,6 +41,7 @@ steps:
   image: plugins/docker
   when:
     event:
+    - push
     - tag
   # Todo
   #environment:
@@ -49,8 +50,11 @@ steps:
   volumes:
   - name: docker-certs
     path: /etc/docker/certs.d/
+  environment:
+    PASSWORD:
+      from_secret: registry_password
   settings:
-    debug: true
+    #debug: true
     username: user
     password:
       from_secret: registry_password
@@ -59,6 +63,8 @@ steps:
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
-    - ${DRONE_TAG}
+    - '1.7'
+    #- ${DRONE_TAG}
     build_args:
-    - VERSION=${DRONE_TAG}
+    - VERSION=1.7
+    #- VERSION=${DRONE_TAG}
