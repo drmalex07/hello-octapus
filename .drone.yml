@@ -3,10 +3,10 @@ type: docker
 name: default
 
 
-volumes:
-- name: docker-certs
-  host:
-    path: /etc/docker/certs.d/
+#volumes:
+#- name: docker-certs
+#  host:
+#    path: /etc/docker/certs.d/
 
 steps:
 
@@ -25,7 +25,8 @@ steps:
       from_secret: registry_password
   commands:
   - echo Hello World
-  - ls -hal
+  - ls -hal .
+  - ls -R -hal /etc/docker/certs.d
   - pwd
   # https://docs.drone.io/pipeline/environment/reference/
   #- env
