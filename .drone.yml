@@ -36,15 +36,13 @@ steps:
   when:
     event:
     - tag
+  # https://docs.drone.io/plugins/popular/docker/#parameters
   settings:
     #debug: true
     username: user
     password:
       from_secret: registry_password
-    #custom_dns: ${NAMESERVER_1}
-    #registry: registry-dev-1-opertusmundi:30474
     registry: ${REGISTRY_HOST}:${REGISTRY_PORT}
-    #repo: registry-dev-1-opertusmundi:30474/hello-octapus
     repo: ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
     tags:
     - '1'
