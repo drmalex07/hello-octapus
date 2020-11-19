@@ -8,7 +8,7 @@ COPY resources/ ./resources
 RUN mvn -B dependency:go-offline
 
 COPY src ./src
-RUN mvn -B package shade:shade
+RUN mvn -B -DskipTests package shade:shade
 
 
 FROM openjdk:8-jre-alpine
