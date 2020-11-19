@@ -46,14 +46,14 @@ steps:
   #environment:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
-  volumes:
-  - name: docker-certs
-    path: /etc/docker/certs.d/
+  #volumes:
+  #- name: docker-certs
+  #  path: /etc/docker/certs.d/
   #environment:
   #  PASSWORD:
   #    from_secret: registry_password
   settings:
-    #debug: true
+    debug: true
     username: user
     password:
       from_secret: registry_password
