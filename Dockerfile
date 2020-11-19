@@ -5,10 +5,10 @@ WORKDIR /usr/local/hello-octapus
 
 COPY pom.xml ./
 COPY resources/ ./resources
-RUN mvn dependency:go-offline
+RUN mvn -B dependency:go-offline
 
 COPY src ./src
-RUN mvn package shade:shade
+RUN mvn -B package shade:shade
 
 
 FROM openjdk:8-jre-alpine

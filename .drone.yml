@@ -39,8 +39,9 @@ steps:
   settings:
     debug: true
     username: user
-    password:
-      from_secret: registry_password
+    # Fixme
+    #password:
+    #  from_secret: registry_password
     # Fixme 
     custom_dns: 10.0.12.60
     registry: registry-dev-1-opertusmundi:30474
