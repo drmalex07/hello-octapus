@@ -42,8 +42,8 @@ steps:
     username: user
     password:
       from_secret: registry_password
-    registry: ${REGISTRY_HOST}:${REGISTRY_PORT}
-    repo: ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
+    registry: "${REGISTRY_HOST}:${REGISTRY_PORT}"
+    repo: "${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus"
     tags:
     - '1'
     - ${DRONE_TAG}
