@@ -6,7 +6,7 @@ name: default
 volumes:
 - name: docker-certs
   host:
-    path: /etc/docker/certs.d/registry-dev-1-opertusmundi:30474
+    path: /etc/docker/certs.d/registry-dev-1-opertusmundi\:30474
 
 steps:
 
@@ -48,7 +48,7 @@ steps:
   #    from_secret: registry_address
   volumes:
   - name: docker-certs
-    path: /etc/docker/certs.d/registry-dev-1-opertusmundi:30474
+    path: /etc/docker/certs.d/registry-dev-1-opertusmundi\:30474
   #environment:
   #  PASSWORD:
   #    from_secret: registry_password
