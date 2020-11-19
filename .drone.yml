@@ -3,11 +3,11 @@ type: docker
 name: default
 
 
-volumes:
-
-- name: docker-certs
-  host:
-    path: /etc/docker/certs.d/
+#volumes:
+#
+#- name: docker-certs
+#  host:
+#    path: /etc/docker/certs.d/
 
 steps:
 
@@ -26,16 +26,12 @@ steps:
       from_secret: registry-username
     REGISTRY_PASSWORD:
       from_secret: registry-password
-  volumes:
-  - name: docker-certs                                                                                                                                                          
-    path: /etc/docker/certs.d/
   commands:
   - echo Hello World
   - ls -hal
-  - ls -hal /etc/docker/certs.d/
   - pwd
   # https://docs.drone.io/pipeline/environment/reference/
-  - env
+  #- env
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
@@ -52,9 +48,9 @@ steps:
   #environment:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
-  volumes:
-  - name: docker-certs
-    path: /etc/docker/certs.d/
+  #volumes:
+  #- name: docker-certs
+  #  path: /etc/docker/certs.d/
   settings:
     #username:
     #  from_secret: registry-username
