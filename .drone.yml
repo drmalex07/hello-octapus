@@ -38,7 +38,7 @@ steps:
     - tag
   # https://docs.drone.io/plugins/popular/docker/#parameters
   settings:
-    debug: true
+    #debug: true
     username: user
     password:
       from_secret: registry_password
