@@ -19,7 +19,7 @@ steps:
     REGISTRY_PASSWORD:
       from_secret: registry_password
   commands:
-  - echo Hello World > hello.txt
+  - echo "Hello World" > hello.txt
   - ls -hal .
   - ls -R -hal /etc/docker/certs.d
   - pwd
@@ -74,7 +74,7 @@ steps:
     target:
     - staging
   commands:
-  - echo Hello (staging) World
+  - echo "Hello (staging) World"
   - ls -hal .
   - env
 
