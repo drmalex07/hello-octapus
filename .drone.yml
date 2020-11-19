@@ -42,7 +42,7 @@ steps:
     password:
       from_secret: registry_password
     # Fixme 
-    custom_dns: ${NAMESERVER_1}
+    #custom_dns: ${NAMESERVER_1}
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
