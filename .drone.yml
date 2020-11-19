@@ -24,7 +24,7 @@ steps:
   - ls -R -hal /etc/docker/certs.d
   - pwd
   # https://docs.drone.io/pipeline/environment/reference/
-  #- env
+  - env
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
@@ -39,9 +39,8 @@ steps:
   settings:
     debug: true
     username: user
-    # Fixme
-    #password:
-    #  from_secret: registry_password
+    password:
+      from_secret: registry_password
     # Fixme 
     custom_dns: 10.0.12.60
     registry: registry-dev-1-opertusmundi:30474
