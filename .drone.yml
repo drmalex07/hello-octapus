@@ -46,6 +46,6 @@ steps:
     repo: "${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus"
     tags:
     - '1'
-    - ${DRONE_TAG}
+    - "${DRONE_TAG}"
     build_args:
-    - VERSION=${DRONE_TAG}
+    - "VERSION=${DRONE_TAG}"
