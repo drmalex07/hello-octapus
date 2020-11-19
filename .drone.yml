@@ -3,10 +3,10 @@ type: docker
 name: default
 
 
-#volumes:
-#- name: docker-certs
-#  host:
-#    path: /etc/docker/certs.d/
+volumes:
+- name: docker-certs
+  host:
+    path: /etc/docker/certs.d/registry-dev-1-opertusmundi:30474
 
 steps:
 
@@ -47,7 +47,8 @@ steps:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
   volumes:
-  - /etc/docker/certs.d/:/etc/docker/certs.d/
+  - name: docker-certs
+    path: /etc/docker/certs.d/registry-dev-1-opertusmundi:30474
   #environment:
   #  PASSWORD:
   #    from_secret: registry_password
