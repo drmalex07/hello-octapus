@@ -5,7 +5,7 @@
   <groupId>com.example</groupId>
   <artifactId>hello-octapus</artifactId>
   <packaging>jar</packaging>
-  <version>1.7.9</version>
+  <version>1.7.10</version>
   <name>hello-octapus</name>
   
   <url>http://maven.apache.org</url>

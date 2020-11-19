@@ -38,10 +38,13 @@ steps:
   #  REGISTRY_ADDRESS:
   #    from_secret: registry_address
   settings:
+    username:
+      from_secret: registry-username
+    password:
+      from_secret: registry-password
     registry: registry-dev-1-opertusmundi:30474
     repo: registry-dev-1-opertusmundi:30474/hello-octapus
     tags:
-    - latest
     - ${DRONE_TAG}
     build_args:
     - VERSION=${DRONE_TAG}
