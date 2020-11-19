@@ -50,9 +50,9 @@ steps:
   volumes:
   - name: docker-certs
     path: /etc/docker/certs.d/
-  environment:
-    PASSWORD:
-      from_secret: registry_password
+  #environment:
+  #  PASSWORD:
+  #    from_secret: registry_password
   settings:
     #debug: true
     username: user
