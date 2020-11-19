@@ -38,12 +38,12 @@ steps:
     - tag
   # https://docs.drone.io/plugins/popular/docker/#parameters
   settings:
-    #debug: true
+    debug: true
     username: user
     password:
       from_secret: registry_password
-    registry: "${REGISTRY_HOST}:${REGISTRY_PORT}"
-    repo: "${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus"
+    registry: ${REGISTRY_HOST}:${REGISTRY_PORT}
+    repo: ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
     tags:
     - '1'
     - "${DRONE_TAG}"
