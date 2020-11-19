@@ -20,7 +20,7 @@ steps:
   - ls -hal
   - pwd
   # https://docs.drone.io/pipeline/environment/reference/
-  #- env
+  - env
   - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
   # https://discourse.drone.io/t/problems-with-secrets/3286
   - ./echo-secrets.sh
