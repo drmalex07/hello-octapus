@@ -42,10 +42,11 @@ steps:
     username: user
     password:
       from_secret: registry_password
-    registry: ${REGISTRY_HOST}:${REGISTRY_PORT}
+    registry: |-
+      ${REGISTRY_HOST}:${REGISTRY_PORT}
     repo: ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
     tags:
     - '1'
-    - "${DRONE_TAG}"
+    - ${DRONE_TAG}
     build_args:
-    - "VERSION=${DRONE_TAG}"
+    - VERSION=${DRONE_TAG}
