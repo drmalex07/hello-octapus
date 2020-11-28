@@ -2,6 +2,9 @@ kind: pipeline
 type: docker
 name: default
 
+#
+# Steps
+#
 
 steps:
 
@@ -42,6 +45,9 @@ steps:
   - cat hello.txt
   # https://docs.drone.io/pipeline/environment/syntax/#common-problems
   - echo "step is $${DRONE_STEP_NAME}"
+  # check our PostGIS service is reachable
+  - ping -4 -c1 postgres-1
+  - nc -z -v postgres-1 5432
 
 
 # A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
@@ -81,3 +87,16 @@ steps:
   - env
 
 
+#
+# Services
+#
+
+services:
+
+- name: postgis-1
+  image: postgis/postgis:9.6-2.5-alpine
+  environment:
+    POSTGRES_PASSWORD:
+      from_secret: postgres_password
+  commands:
+  - psql -U postgres -l
