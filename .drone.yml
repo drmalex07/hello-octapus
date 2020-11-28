@@ -51,7 +51,7 @@ steps:
   - echo "step is $${DRONE_STEP_NAME}"
   # check our PostGIS service is reachable (by its name)
   - (t=0; T=10; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
-  - (t=0; T=10; while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
+  - (t=0; T=15; while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do echo -n '.'; t=$((t + 1)); test $${t} -ne $${T}; sleep 2; done)
 
 - name: psql
   image: postgres:9.6
