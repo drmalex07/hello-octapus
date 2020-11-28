@@ -51,7 +51,7 @@ steps:
   - echo "step is $${DRONE_STEP_NAME}"
   # check our PostGIS service is reachable (by its name)
   - (t=0; T=10; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
-  - (t=0; T=15; while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do echo -n '.'; t=$((t + 1)); test $${t} -ne $${T}; sleep 2; done)
+  - (t=0; T=15; while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do echo '.'; t=$((t + 1)); test $${t} -ne $${T}; sleep 2; done)
 
 - name: psql
   image: postgres:9.6
@@ -61,6 +61,9 @@ steps:
     POSTGRES_PASSWORD:
       from_secret: postgres_password
   commands:
+  - touch ~/.pgpass
+  - chmod og-rwx ~/.pgpass
+  - echo "$${POSTGIS_HOST}:$${POSTGIS_PORT}:*:postgres:$${POSTGRES_PASSWORD}" > ~/.pgpass
   - psql -U postgres -h $${POSTGIS_HOST} -p $${POSTGIS_PORT} -l
 
 # A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
