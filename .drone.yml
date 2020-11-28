@@ -104,5 +104,3 @@ services:
   environment:
     POSTGRES_PASSWORD:
       from_secret: postgres_password
-  commands:
-  - psql -U postgres -l
