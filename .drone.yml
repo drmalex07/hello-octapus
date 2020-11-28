@@ -43,6 +43,8 @@ steps:
   environment:
     POSTGIS_HOST: 'postgis-1'
     POSTGIS_PORT: '5432'
+    POSTGRES_PASSWORD:
+      from_secret: postgres_password
   commands:
   - env
   - ls -hal .
@@ -50,7 +52,7 @@ steps:
   # https://docs.drone.io/pipeline/environment/syntax/#common-problems
   - echo "step is $${DRONE_STEP_NAME}"
   # check our PostGIS service is reachable (by its name)
-  - (t=0; T=6; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test ${t} -ne ${T}; sleep 1; done)
+  - (t=0; T=6; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
   - nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}
 
 
