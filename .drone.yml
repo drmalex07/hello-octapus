@@ -53,12 +53,12 @@ steps:
   - (t=0; T=10; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
   - >-
     (
-      t=0; T=15; 
+      t=${timeout:-20};
       while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do 
         echo '.'; 
-        t=$((t + 1)); 
-        test $${t} -ne $${T}; 
-        sleep 2; 
+        t=$((t - 1)); 
+        test $${t} -ne 0; 
+        sleep 1; 
       done
     )
 
@@ -73,7 +73,9 @@ steps:
   - touch ~/.pgpass
   - chmod og-rwx ~/.pgpass
   - echo "$${POSTGIS_HOST}:$${POSTGIS_PORT}:*:postgres:$${POSTGRES_PASSWORD}" > ~/.pgpass
-  - psql -U postgres -h $${POSTGIS_HOST} -p $${POSTGIS_PORT} -l
+  - >-
+    psql -U postgres -h $${POSTGIS_HOST} -p $${POSTGIS_PORT}
+      -c 'SELECT 1'
 
 # A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
 - name: docker-build
