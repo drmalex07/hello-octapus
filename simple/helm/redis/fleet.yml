@@ -3,8 +3,8 @@ namespace: default
 helm:
   releaseName: 'redis-c1'
   
-  chart: "redis"
-  repo: "bitnami"
+  chart: "bitnami/redis"
+  repo: "https://charts.bitnami.com/bitnami"
   version: "12.1.2"
   
   values:
