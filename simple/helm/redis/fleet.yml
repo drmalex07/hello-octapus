@@ -7,8 +7,8 @@ helm:
   repo: "https://charts.bitnami.com/bitnami"
   version: "12.1.2"
   
-  values:
-    cluster:
-      slaveCount: 1
+  #values:
+  #  cluster:
+  #    slaveCount: 1
 
 
