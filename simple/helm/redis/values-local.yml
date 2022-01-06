@@ -7,9 +7,13 @@ master:
   persistence:
     size: 1Gi
     storageClass: local-1
+  livenessProbe:
+    initialDelaySeconds: 10
 slave: 
   configmap:
   - "--tcp-backlog=128"
   persistence: 
     size: 1Gi
     storageClass: local-1
+  livenessProbe:
+    initialDelaySeconds: 10
