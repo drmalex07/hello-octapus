@@ -1,3 +1,11 @@
 
 cluster:
   slaveCount: 1
+master:
+  persistence:
+    size: 1Gi
+    storageClass: local-1
+slave: 
+  persistence: 
+    size: 1Gi
+    storageClass: local-1
