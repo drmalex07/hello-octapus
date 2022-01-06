@@ -2,7 +2,7 @@
 cluster:
   slaveCount: 1
 master:
-  configmap:
+  extraFlags:
   - "--tcp-backlog=128"
   persistence:
     size: 1Gi
@@ -10,7 +10,7 @@ master:
   livenessProbe:
     initialDelaySeconds: 10
 slave: 
-  configmap:
+  extraFlags:
   - "--tcp-backlog=128"
   persistence: 
     size: 1Gi
