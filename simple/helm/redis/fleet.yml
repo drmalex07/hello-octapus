@@ -12,10 +12,8 @@ helm:
   values:
     master:
       podLabels:
-        updatedAt: >-
-          20220107T00:44:00
+        updatedAt: !!str "20220107T00:44:00"
     slave:
       podLabels:
-        updatedAt: >- 
-          20220107T00:44:00
+        updatedAt: !!str "20220107T00:44:00"
 
