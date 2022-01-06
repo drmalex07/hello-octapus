@@ -4,9 +4,9 @@ metadata:
   name: nginx-1
   labels:
     app: nginx-1
-    foo: bar-3
+    foo: bar-4
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: nginx-1
