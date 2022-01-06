@@ -1,0 +1,14 @@
+namespace: default
+
+helm:
+  releaseName: 'redis-c1'
+  
+  chart: "redis"
+  repo: "bitnami"
+  version: "12.1.2"
+  
+  values:
+    cluster:
+      slaveCount: 1
+
+
