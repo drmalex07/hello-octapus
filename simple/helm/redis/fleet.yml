@@ -9,9 +9,11 @@ helm:
   
   valuesFiles:
   - values-local.yml
-  # or ..
-  #values:
-  #  cluster:
-  #    slaveCount: 1
-
+  values:
+    master:
+      podLabels:
+        updatedAt: '20220107T00:44:00'
+    slave:
+      podLabels:
+        updatedAt: '20220107T00:44:00'
 
