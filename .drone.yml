@@ -5,8 +5,8 @@ name: prepare-1
 
 trigger:
  ref: 
- - 'refs/tags/1.[0-9].0'
- - 'refs/tags/1.[1-9][0-9].0'
+ - 'refs/tags/1.[0-9].0-x'
+ - 'refs/tags/1.[1-9][0-9].0-x'
 
 steps:
 
@@ -29,9 +29,11 @@ kind: pipeline
 type: docker
 name: default
 
-#
-# Steps
-#
+trigger:
+  ref:
+    exclude:
+    - 'refs/tags/1.[0-9].0-x'
+    - 'refs/tags/1.[1-9][0-9].0-x'   
 
 steps:
 
