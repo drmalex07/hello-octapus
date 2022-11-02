@@ -1,3 +1,26 @@
+---
+kind: pipeline
+type: docker
+name: prepare-1
+
+steps:
+
+- name: step-1
+  image: busybox:1.32
+  when:
+    event:
+    - push
+    - tag
+  environment:
+    Foo: Bar
+  commands:
+  - echo "Hello World" > hello.txt
+  - ls -hal .
+  - pwd
+  - env
+
+
+---
 kind: pipeline
 type: docker
 name: default
@@ -9,119 +32,15 @@ name: default
 steps:
 
 # A generic step (commands executed inside a container)
-- name: greeting-1
-  image: busybox:1.32
+- name: maven-build
+  image: maven:3.8.6-eclipse-temurin-17-alpine
   when:
     event:
     - push
     - tag
   environment:
-    DB_USER: admin
-    DB_PASS:
-      from_secret: db_password
-    REGISTRY_PASSWORD:
-      from_secret: registry_password
+    {}
   commands:
-  - echo "Hello World" > hello.txt
-  - ls -hal .
-  - ls -R -hal /etc/docker/certs.d
-  - pwd
-  # https://docs.drone.io/pipeline/environment/reference/
-  - env
-  - echo tag=${DRONE_TAG} branch=${DRONE_BRANCH} commit=${DRONE_COMMIT}
-  # https://discourse.drone.io/t/problems-with-secrets/3286
-  - ./echo-secrets.sh
+  - mvn -B package
 
 
-# Another generic step (the workspace from previous step is preserved!)
-- name: greeting-2
-  image: busybox:1.32
-  when:
-    event:
-    - push
-    - tag
-  environment:
-    POSTGIS_HOST: 'postgis-1'
-    POSTGIS_PORT: '5432'
-  commands:
-  - env
-  - ls -hal .
-  - cat hello.txt
-  # https://docs.drone.io/pipeline/environment/syntax/#common-problems
-  - echo "step is $${DRONE_STEP_NAME}"
-  # check our PostGIS service is reachable (by its name)
-  - (t=0; T=10; while ! ping -q -4 -c1 $${POSTGIS_HOST}; do t=$((t + 1)); test $${t} -ne $${T}; sleep 1; done)
-  - >-
-    (
-      t=${timeout:-20};
-      while ! nc -z -v $${POSTGIS_HOST} $${POSTGIS_PORT}; do 
-        echo '.'; 
-        t=$((t - 1)); 
-        test $${t} -ne 0; 
-        sleep 1; 
-      done
-    )
-
-- name: psql
-  image: postgres:9.6
-  environment:
-    POSTGIS_HOST: 'postgis-1'
-    POSTGIS_PORT: '5432'
-    POSTGRES_PASSWORD:
-      from_secret: postgres_password
-  commands:
-  - touch ~/.pgpass
-  - chmod og-rwx ~/.pgpass
-  - echo "$${POSTGIS_HOST}:$${POSTGIS_PORT}:*:postgres:$${POSTGRES_PASSWORD}" > ~/.pgpass
-  - >-
-    psql -U postgres -h $${POSTGIS_HOST} -p $${POSTGIS_PORT}
-    -c 'SELECT 1'
-
-# A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
-- name: docker-build
-  image: plugins/docker
-  when:
-    event:
-    - tag
-  # https://docs.drone.io/plugins/popular/docker/#parameters
-  settings:
-    #debug: true
-    username: user
-    password:
-      from_secret: registry_password
-    registry: |-
-      ${REGISTRY_HOST}:${REGISTRY_PORT}
-    repo: |-
-      ${REGISTRY_HOST}:${REGISTRY_PORT}/hello-octapus
-    tags:
-    - ${DRONE_SEMVER_MAJOR}
-    - ${DRONE_TAG}
-    build_args:
-    - VERSION=${DRONE_TAG}
-
-
-# The following step is only be executed if a successful build is promoted to target "staging"
-- name: staging-demo
-  image: busybox:1.32
-  when:
-    event:
-    - promote
-    target:
-    - staging
-  commands:
-  - echo "Hello (staging) World"
-  - ls -hal .
-  - env
-
-
-#
-# Services
-#
-
-services:
-
-- name: postgis-1
-  image: postgis/postgis:9.6-2.5-alpine
-  environment:
-    POSTGRES_PASSWORD:
-      from_secret: postgres_password
