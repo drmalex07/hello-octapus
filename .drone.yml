@@ -69,6 +69,8 @@ steps:
     password:
       from_secret: docker_password
     repo: alexakis/hello-octapus
+    tags:
+    - ${DRONE_TAG}
     mirror: http://registry-mirror:5000
     build_args:
     - VERSION=${DRONE_TAG}
