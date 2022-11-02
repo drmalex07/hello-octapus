@@ -3,6 +3,11 @@ kind: pipeline
 type: docker
 name: prepare-1
 
+trigger:
+ ref: 
+ - 'refs/tags/1.[0-9].0'
+ - 'refs/tags/1.[1-9][0-9].0'
+
 steps:
 
 - name: step-1
@@ -10,7 +15,6 @@ steps:
   when:
     event:
     - push
-    - tag
   environment:
     Foo: Bar
   commands:
@@ -31,9 +35,8 @@ name: default
 
 steps:
 
-# A generic step (commands executed inside a container)
 - name: maven-build
-  image: maven:3.8.6-eclipse-temurin-17-alpine
+  image: maven:3.6.3-openjdk-8 
   when:
     event:
     - push
@@ -41,6 +44,32 @@ steps:
   environment:
     {}
   commands:
-  - mvn -B package
+  - mvn -B package shade:shade
 
+- name: exec-jar
+  image: openjdk:8-jre-alpine 
+  when:
+    event:
+    - push
+    - tag
+  environment:
+    {}
+  commands:
+  - java -jar target/hello-octapus-*.jar
+
+- name: publish-image-1
+  image: plugins/docker
+  when:
+    event:
+    - tag
+  settings:
+    debug: true
+    username: 
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: alexakis/hello-octapus
+    mirror: http://registry-mirror:5000
+    build_args:
+    - VERSION=${DRONE_TAG}
 
