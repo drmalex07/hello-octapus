@@ -1,4 +1,5 @@
-FROM maven:3.6.3-openjdk-8 AS maven
+FROM alexakis/hello-octapus-base:1.8
+#FROM maven:3.6.3-openjdk-8 AS maven
 
 RUN mkdir /usr/local/hello-octapus
 WORKDIR /usr/local/hello-octapus
