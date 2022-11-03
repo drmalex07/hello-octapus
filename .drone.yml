@@ -1,11 +1,11 @@
 ---
 kind: pipeline
 type: docker
-name: prepare-1
+name: prepare-base-image
 
 trigger:
  ref: 
- - 'refs/tags/*-prepare'
+ - 'refs/tags/*-base'
 
 steps:
 
@@ -39,7 +39,7 @@ steps:
     repo: alexakis/hello-octapus-base
     tags:
     - "${DRONE_SEMVER_SHORT}"
-    - "${DRONE_SEMVER_MAJOR}:${DRONE_SEMVER_MINOR}"
+    - "${DRONE_SEMVER_MAJOR}.${DRONE_SEMVER_MINOR}"
     mirror: http://registry-mirror:5000
 
 ---
@@ -50,7 +50,7 @@ name: default
 trigger:
   ref:
     exclude:
-    - 'refs/tags/*-prepare'
+    - 'refs/tags/*-base'
 
 steps:
 
