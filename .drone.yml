@@ -63,19 +63,22 @@ steps:
     )
 
 - name: psql
-  image: postgres:9.6
+  image: postgres:10.14-alpine
   environment:
-    POSTGIS_HOST: 'postgis-1'
-    POSTGIS_PORT: '5432'
-    POSTGRES_PASSWORD:
+    DATABASE_HOST: postgis-1
+    PGHOST: postgis-1
+    DATABASE_POSTGRES_PASSWORD:
       from_secret: postgres_password
+    DATABASE_USER: tester1
+    DATABASE_PASSWORD: tester1
+    DATABASE_NAME: hello-octapus
   commands:
   - touch ~/.pgpass
   - chmod og-rwx ~/.pgpass
-  - echo "$${POSTGIS_HOST}:$${POSTGIS_PORT}:*:postgres:$${POSTGRES_PASSWORD}" > ~/.pgpass
-  - >-
-    psql -U postgres -h $${POSTGIS_HOST} -p $${POSTGIS_PORT}
-    -c 'SELECT 1'
+  - ./.bin/generate-pgpass.sh >~/.pgpass
+  - ./.bin/generate-database-setup.sh | psql -U postgres
+  - psql -U postgres -l -A -t
+  - psql -U $${DATABASE_USER} -d $${DATABASE_NAME} -A -t -c '\d'
 
 # A step that builds the Docker image (see https://docs.drone.io/plugins/popular/docker/)
 - name: docker-build
@@ -121,7 +124,7 @@ steps:
 services:
 
 - name: postgis-1
-  image: postgis/postgis:9.6-2.5-alpine
+  image: postgis/postgis:10-3.0-alpine
   environment:
     POSTGRES_PASSWORD:
       from_secret: postgres_password
