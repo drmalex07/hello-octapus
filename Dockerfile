@@ -1,4 +1,5 @@
-FROM maven:3.6.3-openjdk-8 AS maven
+#FROM maven:3.6.3-openjdk-8 AS maven
+FROM adoptopenjdk/maven-openjdk11 AS maven
 
 RUN mkdir /usr/local/hello-octapus
 WORKDIR /usr/local/hello-octapus
@@ -11,7 +12,8 @@ COPY src ./src
 RUN mvn -B -DskipTests package shade:shade
 
 
-FROM openjdk:8-jre-alpine
+#FROM openjdk:8-jre-alpine
+FROM adoptopenjdk/openjdk11:x86_64-alpine-jdk-11.0.19_7-slim
 
 ARG VERSION
 ENV VERSION ${VERSION}
