@@ -23,10 +23,11 @@ jobs:
     - run: >-
         echo "Github Ref: ${{ github.ref }}"
     - run: env | sort
+    - run: uname -a
     - run: whoami
     - run: apt-get --version
     - run: sudo apt-get install jq
-    - run: uname -a
+    - run: jq --version
     - run: docker info
     - run: java -version 
     #- run: 'false' # if a step fails, the runner will skip next steps
@@ -52,8 +53,8 @@ jobs:
           ghcr.io/${{ github.repository }}
     - run: >-
         echo "Tags: ${{ steps.meta.outputs.tags }}"
+    # https://github.com/docker/build-push-action/blob/e27bcee4eb9e7b4bc168418e3364c4482120393a/docs/advanced/cache.md
     - uses: docker/setup-buildx-action@v2
-    - run: env | sort
     - uses: docker/build-push-action@v4
       with:
         context: .
@@ -62,5 +63,6 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         # https://docs.docker.com/build/cache/backends/gha/
+        # https://github.com/docker/build-push-action/blob/e27bcee4eb9e7b4bc168418e3364c4482120393a/docs/advanced/cache.md
         cache-from: type=gha
         cache-to: type=gha,mode=max
