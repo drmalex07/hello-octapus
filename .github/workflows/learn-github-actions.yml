@@ -13,16 +13,21 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
+      with: # note: for private submodules we need a fine-grained access token (default token only covers top-level repo)
+        submodules: 'true'
+        # access token (fine-grained PAT) with (extra) read permissions on private submodules
+        token: ${{ secrets.ACCESS_TOKEN }} 
     - uses: actions/setup-java@v2
       with:
         java-version: '11'
         distribution: 'temurin'
         cache: 'maven'
     - run: ls -hal
+    - run: env | sort
+    - run: ls -hal scripts
     # see variables on available contexts (https://docs.github.com/en/actions/learn-github-actions/contexts#github-context)
     - run: >-
         echo "Github Ref: ${{ github.ref }}"
-    - run: env | sort
     - run: uname -a
     - run: whoami
     - run: apt-get --version
@@ -38,6 +43,8 @@ jobs:
   # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages
   build_image:
     runs-on: ubuntu-20.04
+    needs: # make dependent on succesfull completion of another job
+    - helloworld
     steps:
     - uses: actions/checkout@v3
     - uses: docker/login-action@v2
