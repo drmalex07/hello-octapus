@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello-octapus-1
+spec:
+  template:
+    metadata:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      imagePullSecrets:
+      - name: ghcr-io-docker-registry
+      containers:
+      - image: ghcr.io/drmalex07/hello-private-octapus:main
+        name: hello-octapus
+        resources: {}
+      restartPolicy: Never
