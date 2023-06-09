@@ -13,7 +13,9 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
-      with: # note: for private submodules we need a fine-grained access token (default token only covers top-level repo)
+      with: 
+        # note: for private submodules we need a fine-grained access token (default token only covers top-level repo)
+        # see https://github.com/orgs/community/discussions/25516
         submodules: 'true'
         # access token (fine-grained PAT) with (extra) read permissions on private submodules
         token: ${{ secrets.ACCESS_TOKEN }} 
@@ -43,6 +45,8 @@ jobs:
   # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages
   build_image:
     runs-on: ubuntu-20.04
+    if: >-
+      github.ref_type == 'tag'
     needs: # make dependent on succesfull completion of another job
     - helloworld
     steps:
