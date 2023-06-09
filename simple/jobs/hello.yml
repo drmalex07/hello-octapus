@@ -5,6 +5,8 @@ metadata:
 spec:
   template:
     metadata:
+      labels:
+        realname: hello-octapus
     spec:
       securityContext:
         runAsUser: 1000
