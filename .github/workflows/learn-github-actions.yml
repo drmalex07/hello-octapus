@@ -35,13 +35,21 @@ jobs:
     - run: apt-get --version
     - run: sudo apt-get install jq
     - run: jq --version
+    - name: Dump github context
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#example-printing-context-information-to-the-log
+      run: |
+        echo '${{ toJson(github) }}' | jq .
     - run: docker info
     - run: java -version 
     #- run: 'false' # if a step fails, the runner will skip next steps
     - run: mvn -version
     - run: mvn package shade:shade -B
     - run: java -jar target/hello-octapus.jar
-  
+    # an example of setting an env variable
+    - run: >-
+        echo "NOW=$(date)" >> $GITHUB_ENV
+    - run: echo "NOW=$NOW"
+    
   # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages
   build_image:
     runs-on: ubuntu-20.04
@@ -70,6 +78,11 @@ jobs:
       with:
         context: .
         file: src/main/docker/Dockerfile
+        build-args: |
+           git_url=${{ github.event.repository.url }}
+           git_build_time=${{ github.event.head_commit.timestamp }}
+           git_tags=${{ github.ref_name }}
+           git_commit=${{ github.sha }}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
