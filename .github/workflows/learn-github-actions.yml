@@ -1,9 +1,14 @@
 name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
+
+# run manually
+#on: workflow_dispatch
+
 on: 
   push:
     branches:
-    - github-workflows-example
+    - 'ci-*'
+    #- github-workflows-example
     tags:
     - '1.*'
 
@@ -84,7 +89,12 @@ jobs:
            git_tags=${{ github.ref_name }}
            git_commit=${{ github.sha }}
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        #tags: ${{ steps.meta.outputs.tags }}
+        # or give tags explicitly ...
+        tags: |
+          ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          ghcr.io/${{ github.repository }}:${{ github.ref_name }}-simple
+          ghcr.io/${{ github.repository }}:${{ github.sha }}
         labels: ${{ steps.meta.outputs.labels }}
         # https://docs.docker.com/build/cache/backends/gha/
         # https://github.com/docker/build-push-action/blob/e27bcee4eb9e7b4bc168418e3364c4482120393a/docs/advanced/cache.md
