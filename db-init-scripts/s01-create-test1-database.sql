@@ -1,0 +1,3 @@
+CREATE USER tester1 WITH PASSWORD :'password' LOGIN;
+CREATE DATABASE test1 OWNER tester1;
+

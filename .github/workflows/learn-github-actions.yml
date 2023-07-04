@@ -8,7 +8,7 @@ on:
   push:
     branches:
     - 'ci-*'
-    - github-workflows-example
+    #- github-workflows-example
     tags:
     - '1.*'
 

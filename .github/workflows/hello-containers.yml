@@ -6,7 +6,7 @@ on:
   push:
     branches:
     - 'example'
-    - 'github-workflows-example'
+    #- 'github-workflows-example'
 
 jobs:
   
