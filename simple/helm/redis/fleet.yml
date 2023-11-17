@@ -1,6 +1,7 @@
+# https://fleet.rancher.io/0.9/ref-fleet-yaml#reference
+
 namespace: default
 
-# https://fleet.rancher.io/0.9/ref-fleet-yaml#reference
 helm:
   releaseName: 'redis-1'
   
@@ -16,15 +17,31 @@ helm:
   values:
     master:
       podLabels:
-        updatedAt: '20220107'
+        updatedAt: '20231115'
     slave:
       podLabels:
-        updatedAt: '20220107'
+        updatedAt: '20231115'
 
-  # values from cluster resources
-  valuesFrom:
-  - secretKeyRef:
-      # a secret with the `auth.password` value
-      name: redis-1-auth
-      namespace: default
-      key: values.yaml
+  ## values from cluster resources
+  #valuesFrom:
+  #- secretKeyRef:
+  #    # a secret with the `auth.password` value
+  #    name: redis-1-auth
+  #    namespace: default
+  #    key: values.yaml
+
+
+targetCustomizations:
+
+- name: rke2-1-dev-cineca
+  # A selector used to match a specific cluster by name. When using Fleet in
+  # Rancher, make sure to put the name of the clusters.fleet.cattle.io resource.
+  clusterName: rke2-1-dev-cineca
+  helm:
+    values:
+      master:
+        persistence:
+          storageClass: longhorn-1
+      slave:
+        persistence:
+          storageClass: longhorn-1
