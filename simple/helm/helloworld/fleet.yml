@@ -5,15 +5,27 @@ helm:
   releaseName: 'helloworld'
   
   values:
+    #
     # override part of chart's values
+    #
 
     service:
       type: ClusterIP
     
-    # examples on how to use cluster's (clusters.fleet.cattle.io resource in Rancher)
+    #
+    # examples on how to use cluster's template context 
+    #
 
     key1:
-      cluster-name: "${ .ClusterName }"
+      cluster-name: '${ .ClusterName }'
     key2:
-      labelsAsJson: "${ .ClusterLabels | toJson | quote }"
-      annotationsAsJson: "${ .ClusterAnnotations | toJson | quote }"
+      labelsAsJson: '${ .ClusterLabels | toJson | quote }'
+      contextAsJson: '${ . | toJson | quote }'
+
+
+    # see: kubectl explain clusters.fleet.cattle.io.spec.templateValues (clusters.fleet.cattle.io resource in Rancher)
+    # see: https://github.com/rancher/fleet/issues/1164
+    # e.g. kubectl patch clusters.fleet.cattle.io -n fleet-default rke2-1-dev-cineca -p '{"spec": {"templateValues": {"bar": "Bar"}}}' --type=merge
+        
+    key3:
+      foo: 'foo-${ .ClusterValues.bar }'
