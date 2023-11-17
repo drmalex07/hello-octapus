@@ -10,4 +10,10 @@ helm:
     service:
       type: ClusterIP
     
-    
+    # examples on how to use cluster's (clusters.fleet.cattle.io resource in Rancher)
+
+    key1:
+      cluster-name: "${ .ClusterName }"
+    key2:
+      labelsAsJson: "${ .ClusterLabels | toJson | quote }"
+      annotationsAsJson: "${ .ClusterAnnotations | toJson | quote }"
