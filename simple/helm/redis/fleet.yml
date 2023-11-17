@@ -1,14 +1,18 @@
 namespace: default
 
+# https://fleet.rancher.io/0.9/ref-fleet-yaml#reference
 helm:
-  releaseName: 'redis-c1'
+  releaseName: 'redis-1'
   
   chart: "redis"
   repo: "https://charts.bitnami.com/bitnami"
   version: "12.1.2"
   
+  # values from repo files
   valuesFiles:
   - values-local.yml
+  
+  # inline values
   values:
     master:
       podLabels:
@@ -17,3 +21,10 @@ helm:
       podLabels:
         updatedAt: '20220107'
 
+  # values from cluster resources
+  valuesFrom:
+  - secretKeyRef:
+      # a secret with the `auth.password` value
+      name: redis-1-auth
+      namespace: default
+      key: values.yaml

@@ -1,6 +1,7 @@
 
 cluster:
   slaveCount: 1
+
 master:
   extraFlags:
   - "--tcp-backlog 128"
@@ -9,6 +10,7 @@ master:
     storageClass: local-1
   livenessProbe:
     initialDelaySeconds: 10
+
 slave: 
   extraFlags:
   - "--tcp-backlog 128"
