@@ -7,9 +7,9 @@ helm:
   
   chart: "redis"
   repo: "https://charts.bitnami.com/bitnami"
-  version: "12.1.2"
+  version: "16.11.2"
   
-  # values from repo files
+  # values from repo files (relative paths)
   valuesFiles:
   - values-local.yml
   
@@ -18,17 +18,17 @@ helm:
     master:
       podLabels:
         updatedAt: '20231115'
-    slave:
+    replica:
       podLabels:
         updatedAt: '20231115'
 
-  ## values from cluster resources
-  #valuesFrom:
-  #- secretKeyRef:
-  #    # a secret with the `auth.password` value
-  #    name: redis-1-auth
-  #    namespace: default
-  #    key: values.yaml
+  # values from cluster resources
+  valuesFrom:
+  - secretKeyRef:
+      # a secret with the `auth.password` value
+      name: redis-1-auth
+      namespace: default
+      key: values.yaml
 
 
 targetCustomizations:
@@ -39,9 +39,11 @@ targetCustomizations:
   clusterName: rke2-1-dev-cineca
   helm:
     values:
+      global:
+        storageClass: longhorn-1
       master:
+        persistence: 
+          size: &pvcSize 1536Mi
+      replica:
         persistence:
-          storageClass: longhorn-1
-      slave:
-        persistence:
-          storageClass: longhorn-1
+          size: *pvcSize

@@ -1,7 +1,4 @@
 
-cluster:
-  slaveCount: 1
-
 master:
   extraFlags:
   - "--tcp-backlog 128"
@@ -11,7 +8,8 @@ master:
   livenessProbe:
     initialDelaySeconds: 10
 
-slave: 
+replica:
+  replicaCount: 1
   extraFlags:
   - "--tcp-backlog 128"
   persistence: 
