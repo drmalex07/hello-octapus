@@ -1,5 +1,13 @@
 namespace: default
 
+# https://fleet.rancher.io/0.9/ref-fleet-yaml#reference
 helm:
   releaseName: 'helloworld'
+  
+  values:
+    # override part of chart's values
 
+    service:
+      type: ClusterIP
+    
+    
