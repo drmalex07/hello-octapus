@@ -50,7 +50,7 @@ jobs:
     - run: mvn -B package shade:shade
     - run: java -jar target/hello-octapus.jar
     
-    # Publish to Github packages
+    # Publish to Github packages (on each new tag)
     - run: >-
         mvn -B deploy
       if: >-

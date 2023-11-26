@@ -1,5 +1,11 @@
 # README - Use Maven package from Github packages
 
+## 1. Declare Maven registry inside POM
+
+Look `distributionManagement` section in POM.
+
+## 2. Use as a dependency in another project
+
 See https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-apache-maven-registry
 
 An example for `~/.m2/settings.xml`:
