@@ -3,25 +3,10 @@ name: maven-package
 # run manually
 #on: workflow_dispatch
 
-#permissions:
-#  #actions: read|write|none
-#  #checks: read|write|none
-#  contents: read
-#  #deployments: read|write|none
-#  #id-token: read|write|none
-#  #issues: read|write|none
-#  #discussions: read|write|none
-#  packages: write
-#  #pages: read|write|none
-#  #pull-requests: read|write|none
-#  repository-projects: read
-#  #security-events: read|write|none
-#  statuses: read
-
 on: 
   push:
     branches:
-    - 'github-workflows-package-jar'
+    - 'github-workflows-package-maven'
     tags:
     - '1.*'
 
@@ -40,7 +25,7 @@ jobs:
         submodules: 'true'
         # access token (fine-grained PAT) with (extra) read permissions on private submodules
         token: ${{ secrets.ACCESS_TOKEN }} 
-    - uses: actions/setup-java@v2
+    - uses: actions/setup-java@v3
       with:
         java-version: '11'
         distribution: 'temurin'
@@ -66,6 +51,9 @@ jobs:
     - run: java -jar target/hello-octapus.jar
     
     # Publish to Github packages
-    - run: mvn -B deploy
+    - run: >-
+        mvn -B deploy
+      if: >-
+        startsWith(github.event.ref, 'refs/tags/1.')
     
 
