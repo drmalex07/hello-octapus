@@ -11,6 +11,10 @@ on:
 jobs:
   
   helloworld:
+    
+    # FIXME
+    #permissions: write-all
+    
     runs-on: ubuntu-20.04
     env:
       # NOTE: needed for publishing to packages
