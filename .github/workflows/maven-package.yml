@@ -62,32 +62,41 @@ jobs:
     - run: mvn -B package shade:shade
     - run: java -jar target/hello-octapus.jar
    
-    # https://github.com/orgs/community/discussions/26625
-    - name: Prepare tag for release
-      id: prepare_tag
-      # Output the tag name (extracted from git ref)
-      run: |-
-        echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
 
-    - name: Create release
-      id: create_release
-      uses: actions/create-release@v1
+    - name: Create release 
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.prepare_tag.outputs.tag }}
-        draft: false
-        prerelease: false
+        files: |
+          target/hello-octapus.jar
     
-    - name: Upload release asset
-      id: upload_release_asset 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the "create_release" step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: ./target/hello-octapus.jar
-        #asset_name: hello-octapus.jar
-        asset_name: hello-octapus-${{ steps.prepare_tag.outputs.tag }}.jar
-        asset_content_type: application/java-archive
+#    # https://github.com/orgs/community/discussions/26625
+#    - name: Prepare tag for release
+#      id: prepare_tag
+#      # Output the tag name (extracted from git ref)
+#      run: |-
+#        echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+#          
+#    - name: Create release
+#      id: create_release
+#      uses: actions/create-release@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        tag_name: ${{ github.ref }}
+#        release_name: Release ${{ steps.prepare_tag.outputs.tag }}
+#        draft: false
+#        prerelease: false
+#    
+#    - name: Upload release asset
+#      id: upload_release_asset 
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the "create_release" step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+#        asset_path: ./target/hello-octapus.jar
+#        #asset_name: hello-octapus.jar
+#        asset_name: hello-octapus-${{ steps.prepare_tag.outputs.tag }}.jar
+#        asset_content_type: application/java-archive
