@@ -5,7 +5,7 @@
   <groupId>com.example</groupId>
   <artifactId>hello-octapus</artifactId>
   <packaging>jar</packaging>
-  <version>1.8.4</version>
+  <version>1.8.5</version>
   <name>hello-octapus</name>
   
   <url>http://maven.apache.org</url>
@@ -13,7 +13,15 @@
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+ 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/drmalex07/hello-octapus</url>
+    </repository>
+  </distributionManagement>
+ 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

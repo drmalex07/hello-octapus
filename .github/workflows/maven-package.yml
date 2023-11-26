@@ -1,0 +1,71 @@
+name: maven-package
+
+# run manually
+#on: workflow_dispatch
+
+#permissions:
+#  #actions: read|write|none
+#  #checks: read|write|none
+#  contents: read
+#  #deployments: read|write|none
+#  #id-token: read|write|none
+#  #issues: read|write|none
+#  #discussions: read|write|none
+#  packages: write
+#  #pages: read|write|none
+#  #pull-requests: read|write|none
+#  repository-projects: read
+#  #security-events: read|write|none
+#  statuses: read
+
+on: 
+  push:
+    branches:
+    - 'github-workflows-package-jar'
+    tags:
+    - '1.*'
+
+jobs:
+  
+  helloworld:
+    runs-on: ubuntu-20.04
+    env:
+      # NOTE: needed for publishing to packages
+      GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+    steps:
+    - uses: actions/checkout@v3
+      with: 
+        # note: for private submodules we need a fine-grained access token (default token only covers top-level repo)
+        # see https://github.com/orgs/community/discussions/25516
+        submodules: 'true'
+        # access token (fine-grained PAT) with (extra) read permissions on private submodules
+        token: ${{ secrets.ACCESS_TOKEN }} 
+    - uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: 'maven'
+    - run: ls -hal
+    - run: env | sort
+    - run: ls -hal scripts
+    # see variables on available contexts (https://docs.github.com/en/actions/learn-github-actions/contexts#github-context)
+    - run: >-
+        echo "Github Ref: ${{ github.ref }}"
+    - run: uname -a
+    - run: whoami
+    - run: apt-get --version
+    - run: sudo apt-get install jq
+    - run: jq --version
+    - name: Dump github context
+      # https://docs.github.com/en/actions/learn-github-actions/contexts#example-printing-context-information-to-the-log
+      run: |
+        echo '${{ toJson(github) }}' | jq .
+    - run: java -version 
+    - run: mvn -version
+    - run: mvn -B package shade:shade
+    - run: java -jar target/hello-octapus.jar
+    
+    # Publish to Github packages
+    - run: mvn -B deploy
+    
+
