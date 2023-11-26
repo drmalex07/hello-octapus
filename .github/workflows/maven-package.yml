@@ -11,6 +11,24 @@ on:
 jobs:
   
   helloworld:
+    
+    # FIXME
+    # https://stackoverflow.com/a/70448851/1943126
+    permissions:
+      actions: read
+      checks: read
+      contents: read
+      #deployments: read|write|none
+      #id-token: read|write|none
+      #issues: read|write|none
+      #discussions: read|write|none
+      #packages: read|write|none
+      #pages: read|write|none
+      pull-requests: read
+      repository-projects: read
+      #security-events: read|write|none
+      #statuses: read|write|none
+    
     runs-on: ubuntu-20.04
     env:
       # NOTE: needed for publishing to packages
