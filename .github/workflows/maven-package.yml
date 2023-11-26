@@ -5,8 +5,6 @@ name: maven-package
 
 on: 
   push:
-    branches:
-    - 'github-workflows-package-maven'
     tags:
     - '1.*'
 
@@ -50,10 +48,25 @@ jobs:
     - run: mvn -B package shade:shade
     - run: java -jar target/hello-octapus.jar
     
-    # Publish to Github packages (on each new tag)
-    - run: >-
-        mvn -B deploy
-      if: >-
-        startsWith(github.event.ref, 'refs/tags/1.')
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
     
-
+    - name: Upload release asset
+      id: upload_release_asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./target/hello-octapus.jar
+        asset_name: hello-octapus.jar
+        #asset_name: hello-octapus-$GITHUB_REF_NAME.jar
+        asset_content_type: application/zip
