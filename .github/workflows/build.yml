@@ -55,8 +55,8 @@ jobs:
   
   build_image:
     runs-on: ubuntu-20.04
-    #if: >-
-    #  github.ref_type == 'tag'
+    if: >-
+      github.ref_type == 'tag'
     needs: # make dependent on succesfull completion of another job
     - helloworld
     steps:
@@ -64,17 +64,23 @@ jobs:
     - uses: docker/setup-buildx-action@v3
       with:
         driver: docker
-    - name: Build base image
-      uses: docker/build-push-action@v4
+    # https://github.com/docker/bake-action (see docker-bake.hcl)   
+    - uses: docker/bake-action@v4
       with:
-        context: .
-        file: ./src/main/docker/maven.Dockerfile
-        load: true
-        tags: maven-build:latest
-    - name: Build app image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./src/main/docker/Dockerfile
         push: false
-        tags: hello-octapus:latest 
+        # override build args and/or tags, see:
+        # - https://github.com/docker/bake-action?tab=readme-ov-file#customizing
+        # - https://docs.docker.com/reference/cli/docker/buildx/bake/#set
+        # - https://github.com/docker/buildx/issues/901
+        set: |
+          default.args.git_url={{ github.event.repository.url }}
+          default.args.git_commit={{ github.sha }}
+          default.args.git_tags={{ github.ref_name }}
+          default.args.git_build_time={{ github.event.head_commit.timestamp }}
+          default.tags=localhost/hello-octapus:{{ github.ref_name }}
+    - name: Inspect image
+      run: >-
+        docker inspect localhost/hello-octapus:{{ github.ref_name }}
+    - name: Test run image
+      run: >-
+        docker run --rm localhost/hello-octapus:{{ github.ref_name }}
