@@ -10,10 +10,10 @@ target "default" {
     git_url = ""
     git_commit = ""
     git_tags = ""
-    git_build_time =  
+    git_build_time = "" 
   }
   dockerfile = "src/main/docker/Dockerfile"
-  context = 
+  context = "." 
   contexts = {
     "maven-build" = "target:maven"
   }
