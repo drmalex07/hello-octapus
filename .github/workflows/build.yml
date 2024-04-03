@@ -64,6 +64,7 @@ jobs:
     - uses: docker/setup-buildx-action@v3
       with:
         driver: docker
+    # see https://docs.docker.com/build/ci/github-actions/named-contexts/
     - name: Build base image
       uses: docker/build-push-action@v4
       with:
