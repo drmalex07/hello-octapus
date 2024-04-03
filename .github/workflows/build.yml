@@ -5,6 +5,8 @@ name: maven-package
 
 on: 
   push:
+    branches:
+    - '*'
     tags:
     - '1.*'
 
@@ -50,32 +52,29 @@ jobs:
         echo "Github Ref: ${{ github.ref }}"
     - run: uname -a
     - run: whoami
-    - run: apt-get --version
-    - run: sudo apt-get install jq
-    - run: jq --version
-    - name: Dump github context
-      # https://docs.github.com/en/actions/learn-github-actions/contexts#example-printing-context-information-to-the-log
-      run: |
-        echo '${{ toJson(github) }}' | jq .
-    - run: java -version 
-    - run: mvn -version
-    - run: mvn -B package shade:shade
-    - run: java -jar target/hello-octapus.jar
-
-    - name: Create SHA256 for artifacts
-      working-directory: target
-      run: >-
-        sha256sum hello-octapus*.jar > hello-octapus.sha256.txt
-      
-    - name: Create release 
-      uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  build_image:
+    runs-on: ubuntu-20.04
+    #if: >-
+    #  github.ref_type == 'tag'
+    needs: # make dependent on succesfull completion of another job
+    - helloworld
+    steps:
+    - uses: actions/checkout@v3
+    - uses: docker/setup-buildx-action@v3
       with:
-        # see https://github.com/softprops/action-gh-release/blob/master/action.yml
-        prerelease: false
-        draft: false
-        files: |
-          target/hello-octapus*.jar
-          target/hello-octapus.sha256.txt
-
+        driver: docker
+    - name: Build base image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./src/main/docker/maven.Dockerfile
+        load: true
+        tags: maven-build:latest
+    - name: Build app image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./src/main/docker/Dockerfile
+        push: false
+        tags: hello-octapus:latest 
