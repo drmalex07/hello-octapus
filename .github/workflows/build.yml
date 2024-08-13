@@ -63,6 +63,7 @@ jobs:
     
     - run: >-
         echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_ENV
+    - run: env | sort
 
     - uses: actions/checkout@v3
     
