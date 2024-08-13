@@ -86,7 +86,7 @@ jobs:
           default.args.git_commit=${{ github.sha }}
           default.args.git_tags=${{ github.ref_name }}
           default.args.git_build_time=${{ github.event.head_commit.timestamp }}
-          default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:${{ github.sha }}
     
     - name: Inspect image
       run: >-
