@@ -61,6 +61,9 @@ jobs:
     - helloworld
     steps:
     
+    - run: >-
+        echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_ENV
+
     - uses: actions/checkout@v3
     
     - uses: docker/setup-buildx-action@v3
@@ -86,7 +89,8 @@ jobs:
           default.args.git_commit=${{ github.sha }}
           default.args.git_tags=${{ github.ref_name }}
           default.args.git_build_time=${{ github.event.head_commit.timestamp }}
-          default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }},ghcr.io/${{ github.repository }}:${{ github.sha }}
+          default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          default.tags=ghcr.io/${{ github.repository }}:${{ env.short_commit }}
     
     - name: Inspect image
       run: >-
