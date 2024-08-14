@@ -61,9 +61,14 @@ jobs:
     - helloworld
     steps:
     
+    - id: get_commit_ids
+      run: >-
+        echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_OUTPUT
+        echo scripts_short_commit=$(git submodule status scripts | awk '{substr($1,1,7)}') >> $GITHUB_OUTPUT
+    
     - run: >-
-        echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_ENV
-    - run: env | sort
+        echo ${{ steps.get_commit_ids.short_commit }}
+        echo ${{ steps.get_commit_ids.scripts_short_commit }}
 
     - uses: actions/checkout@v3
     
@@ -91,7 +96,6 @@ jobs:
           default.args.git_tags=${{ github.ref_name }}
           default.args.git_build_time=${{ github.event.head_commit.timestamp }}
           default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-          default.tags=ghcr.io/${{ github.repository }}:${{ env.short_commit }}
     
     - name: Inspect image
       run: >-
