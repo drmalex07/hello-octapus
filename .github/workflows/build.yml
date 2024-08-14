@@ -61,12 +61,22 @@ jobs:
     - helloworld
     steps:
     
-    - run: >-
-        echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_ENV
-    - run: env | sort
-
     - uses: actions/checkout@v3
+      with:
+        submodules: 'true'
+        token: ${{ secrets.ACCESS_TOKEN }} 
+   
+    - id: get_commit_ids
+      run: |-
+        set -x
+        echo short_commit=$(cut -b 1-7 <<<$GITHUB_SHA) >> $GITHUB_OUTPUT
+        echo scripts_short_commit=$(git submodule status scripts | awk '{print substr($1,1,7)}') >> $GITHUB_OUTPUT
     
+    - run: |-
+        echo ${{ steps.get_commit_ids.outputs.short_commit }}
+        echo ${{ steps.get_commit_ids.outputs.scripts_short_commit }}
+
+   
     - uses: docker/setup-buildx-action@v3
       with:
         driver: docker
@@ -91,7 +101,7 @@ jobs:
           default.args.git_tags=${{ github.ref_name }}
           default.args.git_build_time=${{ github.event.head_commit.timestamp }}
           default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-          default.tags=ghcr.io/${{ github.repository }}:${{ env.short_commit }}
+          default.tags=ghcr.io/${{ github.repository }}:${{ github.ref_name }}-${{ steps.get_commit_ids.outputs.scripts_short_commit }}
     
     - name: Inspect image
       run: >-
