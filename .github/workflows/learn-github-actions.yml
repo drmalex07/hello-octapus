@@ -7,7 +7,7 @@ name: sync-subtree-to-another-repo
 on: 
   push:
     paths:
-    - 'resources/*'
+    - 'resources/**'
     branches:
     - 'github-workflows-commit-to-another-repo'
     tags:
@@ -44,10 +44,23 @@ jobs:
         repository: '${{ github.repository_owner }}/hello-octapus-public'
         path: 'hello-octapus-public' 
         submodules: true
-        token: ${{ secrets.REPO_READER_ACCESS_TOKEN }}
+        token: ${{ secrets.REPO_WRITER_ACCESS_TOKEN }}
     - run: ls -hal
     - run: ls -hal
       working-directory: '${{ github.workspace }}/hello-octapus'
     - run: ls -hal
       working-directory: '${{ github.workspace }}/hello-octapus-public'
     - run: rsync --version
+    - run: >-
+        rsync -avhi --delete --exclude '.gitkeep' ${{ github.workspace }}/hello-octapus/resources/ ${{ github.workspace }}/hello-octapus-public/resources/
+    - run: |-
+        git status
+        git remote -v
+        git config user.name '${{ github.actor }}'
+        git config --global user.email '${{ github.actor }}@users.noreply.github.com'
+      working-directory: '${{ github.workspace }}/hello-octapus-public'
+    - run: |-
+        git add resources && git status
+        git commit -am 'Sync `resources/` folder from ${{ github.repository }}'
+        git push origin master
+      working-directory: '${{ github.workspace }}/hello-octapus-public'
