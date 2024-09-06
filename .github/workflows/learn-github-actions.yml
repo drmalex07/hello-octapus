@@ -50,3 +50,4 @@ jobs:
       working-directory: '${{ github.workspace }}/hello-octapus'
     - run: ls -hal
       working-directory: '${{ github.workspace }}/hello-octapus-public'
+    - run: rsync --version
