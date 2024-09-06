@@ -1,7 +1,6 @@
-hello-octapus
-=============
+# hello-octapus
 
-### What is this?
+## What is this?
 
 A helloworld repository. I use this only for testing Git functionality!
 
