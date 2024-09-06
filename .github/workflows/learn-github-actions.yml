@@ -17,9 +17,16 @@ jobs:
   
   helloworld:
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
     env:
-      FOO: bar
+      TARGET_REPO_NAME: 'hello-octapus-public'
+      TARGET_REPO: '${{ github.repository_owner }}/hello-octapus-public'
+      PATH_TO_SYNC: resources/
     steps:
+    - run: >-
+        echo REPO_NAME=${GITHUB_REPOSITORY#*\/} >> $GITHUB_ENV
     - run: git version
     - run: pwd
     - run: env | sort
@@ -36,31 +43,36 @@ jobs:
     - uses: actions/checkout@v3
       with:
         repository: '${{ github.repository }}'
-        path: 'hello-octapus'
+        path: '${{ env.REPO_NAME }}'
         submodules: true
         token: ${{ secrets.REPO_READER_ACCESS_TOKEN }}
     - uses: actions/checkout@v3
       with:
-        repository: '${{ github.repository_owner }}/hello-octapus-public'
-        path: 'hello-octapus-public' 
+        repository: '${{ env.TARGET_REPO }}'
+        path: '${{ env.TARGET_REPO_NAME }}' 
         submodules: true
         token: ${{ secrets.REPO_WRITER_ACCESS_TOKEN }}
     - run: ls -hal
     - run: ls -hal
-      working-directory: '${{ github.workspace }}/hello-octapus'
+      working-directory: '${{ github.workspace }}/${{ env.REPO_NAME }}'
     - run: ls -hal
-      working-directory: '${{ github.workspace }}/hello-octapus-public'
+      working-directory: '${{ github.workspace }}/${{ env.TARGET_REPO_NAME }}'
     - run: rsync --version
     - run: >-
-        rsync -avhi --delete --exclude '.gitkeep' ${{ github.workspace }}/hello-octapus/resources/ ${{ github.workspace }}/hello-octapus-public/resources/
+        rsync -avhi --delete --exclude '.gitkeep' ./${{ env.REPO_NAME }}/${{ env.PATH_TO_SYNC }} ./${{ env.TARGET_REPO_NAME }}/${{ env.PATH_TO_SYNC }}
     - run: |-
-        git status
         git remote -v
         git config user.name '${{ github.actor }}'
         git config --global user.email '${{ github.actor }}@users.noreply.github.com'
-      working-directory: '${{ github.workspace }}/hello-octapus-public'
+      working-directory: '${{ github.workspace }}/${{ env.TARGET_REPO_NAME }}'
+    - run: >-
+        git status --porcelain=v1
+      working-directory: '${{ github.workspace }}/${{ env.TARGET_REPO_NAME }}'
     - run: |-
-        git add resources && git status
-        git commit -am 'Sync `resources/` folder from ${{ github.repository }}'
-        git push origin master
-      working-directory: '${{ github.workspace }}/hello-octapus-public'
+        if [[ -n "$(git status --porcelain=v1)" ]]
+        then
+          git commit -a -m "Sync from ${GITHUB_REPOSITORY}:${PATH_TO_SYNC}"
+          git push origin master
+        fi
+      working-directory: '${{ github.workspace }}/${{ env.TARGET_REPO_NAME }}'
+
