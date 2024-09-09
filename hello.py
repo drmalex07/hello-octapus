@@ -4,4 +4,6 @@ The all-time classic hello-world example in Python
 
 import sys
 
-print "Hello, (Python) World!!!!!!!!!"
+password="changeme"
+
+print "Hello, (Python) World!!!"
