@@ -1,0 +1,1 @@
+CREATE PUBLICATION eosc_pub WITH (publish = 'insert, update, delete, truncate');
