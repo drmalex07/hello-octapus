@@ -4,14 +4,15 @@ metadata:
   name: helloworld
   annotations:
     nginx.ingress.kubernetes.io/limit-rps: "10"
+    cert-manager.io/cluster-issuer: letsencrypt-http01-staging-issuer
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - helloworld.dev-1.hsc.eofarm.com
-    secretName: dev-1-tls
+    - helloworld.example.com
+    secretName: helloworld-tls
   rules:
-  - host: helloworld.dev-1.hsc.eofarm.com
+  - host: helloworld.example.com
     http:
       paths:
       - path: /
