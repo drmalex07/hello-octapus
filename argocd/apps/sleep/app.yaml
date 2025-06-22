@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sleep
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  project: default
+  sources:
+  - repoURL: https://github.com/drmalex07/hello-octapus 
+    #targetRevision: argocd-app-of-apps # inherit from app of apps 
+    path: deploy/sleep/job-1
+    kustomize:
+      commonAnnotations:
+        argocd.argoproj.io/sync-wave: "1"
+  - repoURL: https://github.com/drmalex07/hello-octapus 
+    #targetRevision: argocd-app-of-apps # inherit from app of apps 
+    path: deploy/sleep/job-2
+    kustomize:
+      commonAnnotations:
+        argocd.argoproj.io/sync-wave: "2"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
