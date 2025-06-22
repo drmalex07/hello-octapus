@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: echo-pi
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "35"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/drmalex07/hello-octapus 
+    #targetRevision: argocd-app-of-apps 
+    path: deploy/echo-pi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
