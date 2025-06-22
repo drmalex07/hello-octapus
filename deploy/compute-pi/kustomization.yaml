@@ -1,0 +1,25 @@
+resources:
+- job.yaml
+
+configMapGenerator:
+- name: compute-pi
+  files:
+  - compute-pi.pl
+  envs:
+  - env
+
+replacements:
+- source:
+    kind: ConfigMap
+    name: compute-pi
+    fieldPath: data.NUM_DIGITS
+  targets:
+  - select:
+      kind: Job
+      name: compute-pi
+    fieldPaths:
+    - 'metadata.name'
+    options:
+      delimiter: '-'
+      index: 2
+      create: true

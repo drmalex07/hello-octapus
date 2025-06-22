@@ -1,0 +1,10 @@
+nameSuffix: "-2"
+
+resources:
+- ../base
+
+patches:
+- path: patch.yaml
+  target:
+    group: batch
+    kind: Job

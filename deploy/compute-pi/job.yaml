@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: compute-pi
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1001200000
+        runAsGroup: 1001200000
+        fsGroup: 1001200000
+      volumes:
+      - name: scripts
+        configMap:
+          name: compute-pi
+          items:
+          - key: compute-pi.pl
+            path: compute-pi.pl
+            mode: 0774
+      - name: results
+        persistentVolumeClaim:
+          claimName: job-data
+      containers:
+      - name: perl
+        image: perl:5.30
+        env:
+        - name: NUM_DIGITS
+          valueFrom:
+            configMapKeyRef:
+              name: compute-pi
+              key: NUM_DIGITS
+        workingDir: /var/opt/compute-pi
+        command:
+        - /opt/compute-pi.pl
+        - -p
+        - $(NUM_DIGITS)
+        - -o
+        - pi.txt
+        volumeMounts:
+        - name: scripts
+          mountPath: /opt
+          readOnly: true
+        - name: results
+          mountPath: /var/opt/compute-pi
+          subPath: compute-pi
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 1
+  parallelism: 1

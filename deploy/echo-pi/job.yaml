@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-pi
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1001200000
+        runAsGroup: 1001200000
+        fsGroup: 1001200000
+      volumes:
+      - name: results
+        persistentVolumeClaim:
+          claimName: job-data
+      containers:
+      - name: busybox
+        image: busybox:1.32
+        workingDir: /var/opt/compute-pi
+        command:
+        - cat
+        - pi.txt
+        volumeMounts:
+        - name: results
+          mountPath: /var/opt/compute-pi
+          subPath: compute-pi
+          readOnly: true
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 1
+  parallelism: 1

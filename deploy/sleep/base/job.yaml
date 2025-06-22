@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sleep
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1001200000
+        runAsGroup: 1001200000
+        fsGroup: 1001200000
+      containers:
+      - name: busybox
+        image: busybox:1.32
+        env:
+        - name: SLEEP_PERIOD
+          value: '60s'
+        command:
+        - sh
+        - -xue
+        - -c
+        - |-
+          sleep ${SLEEP_PERIOD}
+      restartPolicy: Never
+  backoffLimit: 4
+  completions: 1
+  parallelism: 1
