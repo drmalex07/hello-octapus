@@ -9,5 +9,5 @@ spec:
       - name: busybox
         env:
         - name: SLEEP_PERIOD
-          value: '120s'
+          value: '150s'
 

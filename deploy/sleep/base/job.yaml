@@ -14,7 +14,7 @@ spec:
         image: busybox:1.32
         env:
         - name: SLEEP_PERIOD
-          value: '60s'
+          value: '90s'
         command:
         - sh
         - -xue
