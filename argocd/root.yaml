@@ -9,8 +9,7 @@ spec:
     repoURL: https://github.com/drmalex07/hello-octapus
     targetRevision: argocd-app-of-apps
     path: argocd/apps
-    directory:
-      recurse: true
+    kustomize:
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

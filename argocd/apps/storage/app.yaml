@@ -2,15 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: storage
-  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 spec:
   project: default
-  source:
-    repoURL: https://github.com/drmalex07/hello-octapus 
-    #targetRevision: argocd-app-of-apps # inherit from app of apps 
+  sources:
+  - repoURL: https://github.com/drmalex07/hello-octapus 
     path: deploy/storage
+    targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
     namespace: default

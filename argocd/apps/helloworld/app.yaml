@@ -7,10 +7,10 @@ metadata:
     argocd.argoproj.io/sync-wave: "05"
 spec:
   project: default
-  source:
-    repoURL: https://github.com/drmalex07/hello-octapus 
-    #targetRevision: argocd-app-of-apps 
+  sources:
+  - repoURL: https://github.com/drmalex07/hello-octapus 
     path: deploy/helloworld
+    targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
     namespace: default
