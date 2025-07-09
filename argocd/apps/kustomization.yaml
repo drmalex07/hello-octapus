@@ -4,12 +4,10 @@ configMapGenerator:
 - name: target-env
   literals:
   - REPO_URL=https://github.com/drmalex07/hello-octapus
-  - REVISION=argocd-app-of-apps
+  - REVISION=af96daf
 
 resources:
 - storage/app.yaml
-- sleep/app.yaml
-- helloworld/app.yaml
 - compute-pi/app.yaml
 - echo-pi/app.yaml
 
