@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wait-for-app
+  namespace: argocd
+spec:
+  backoffLimit: 12
+  template:
+    metadata:
+    spec:
+      serviceAccountName: argocd-application-controller
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - image: bitnami/kubectl:1
+        name: wait-for-app
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop: [ "ALL" ]
+        env:
+        - name: APP_NAME
+          value: app-1
+        - name: TARGET_REVISION
+          value: '8d59f93'
+        - name: TIMEOUT_SECONDS
+          value: '120'
+        - name: _JQ_FILTER
+          value: >-
+            .status.health.status == "Healthy" 
+            and .status.sync.status == "Synced"
+            and (.status.sync.revisions | unique | join(",")) == $revision
+        command: 
+        - bash
+        - -xue
+        - -o
+        - pipefail
+        - -c 
+        - |- 
+          kubectl wait --for=create --timeout=${TIMEOUT_SECONDS}s app ${APP_NAME}
+          kubectl wait --for=jsonpath='{.status.health.status}'=Healthy --timeout=${TIMEOUT_SECONDS}s app ${APP_NAME} -ojson |\
+            jq -e --arg revision "${TARGET_REVISION}" "${_JQ_FILTER}"
+      restartPolicy: Never
