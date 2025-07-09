@@ -1,0 +1,66 @@
+# vim: set filetype=helm:
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "wait-for-app.jobName" . }}
+  namespace: argocd
+  labels:
+    {{- include "wait-for-app.labels" . | nindent 4 }}
+  {{- with .Values.jobAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:  
+  backoffLimit: 12
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "wait-for-app.selectorLabels" . | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: "wait-for-app"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        env:
+        - name: APP_NAME
+          value: {{ .Values.waitForApp.appName }}
+        - name: TARGET_REVISION
+          value: {{ .Values.waitForApp.targetRevision | squote }}
+        - name: TIMEOUT_SECONDS
+          value: {{ .Values.waitForApp.timeoutSeconds | squote }}
+        command:
+        - bash
+        - -xue
+        - -o
+        - pipefail
+        - -c 
+        - |- 
+          kubectl wait --for=create --timeout=${TIMEOUT_SECONDS}s app ${APP_NAME}
+          kubectl wait --for=jsonpath='{.status.health.status}'=Healthy --timeout=${TIMEOUT_SECONDS}s app ${APP_NAME} -ojson |\
+            jq --exit-status --arg revision "${TARGET_REVISION}" \
+              '.status.health.status == "Healthy" and .status.sync.status == "Synced" and (.status.sync.revisions | unique | join(",")) == $revision'
+        resources: {{- toYaml .Values.resources | nindent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

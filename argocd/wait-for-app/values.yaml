@@ -1,0 +1,45 @@
+image:
+  repository: bitnami/kubectl
+  pullPolicy: IfNotPresent
+  tag: "1.33-debian-12"
+
+nameOverride: ""
+fullnameOverride: ""
+
+jobAnnotations: {}
+podAnnotations: {}
+
+podSecurityContext:
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+serviceAccountName: argocd-application-controller
+
+securityContext:
+  capabilities:
+    drop:
+    - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
+  allowPrivilegeEscalation: false
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+waitForApp:
+  appName: app-1
+  targetRevision: 'xyz12345'
+  timeoutSeconds: 120
