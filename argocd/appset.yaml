@@ -1,0 +1,54 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps-with-deps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: 
+  #- "missingkey=error"
+  syncPolicy:
+    applicationsSync: sync
+  generators:
+  - matrix:
+      generators:
+      - list:
+          elements:
+          - repoURL: https://github.com/drmalex07/hello-octapus
+            targetRevision: 'd7ee1cf'
+      - list:
+          elements:
+          - appName: storage
+          - appName: compute-pi
+          - appName: echo-pi
+            dependencies:
+            - appName: compute-pi
+  template:
+    metadata:
+      name: '{{.appName}}'
+      namespace: argocd
+    spec:
+      project: default
+      sources:
+      - repoURL: '{{.repoURL}}'
+        targetRevision: '{{.targetRevision}}'
+        path: 'argocd/wait-for-app'
+        helm:
+          releaseName: '{{.appName}}-wait-for-deps'
+          values: |-
+            jobAnnotations:
+              argocd.argoproj.io/hook: PreSync
+              #argocd.argoproj.io/hook-delete-policy: HookSucceeded
+            waitForApp:
+              targetRevision: {{.targetRevision}}
+              apps: {{ .dependencies | default (list) | toJson }}
+      - repoURL: '{{.repoURL}}'
+        targetRevision: '{{.targetRevision}}'
+        path: 'argocd/apps/{{.appName}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

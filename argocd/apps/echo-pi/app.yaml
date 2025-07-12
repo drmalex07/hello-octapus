@@ -9,19 +9,6 @@ spec:
   project: default
   sources:
   - repoURL: https://github.com/drmalex07/hello-octapus 
-    path: argocd/wait-for-app 
-    targetRevision: HEAD
-    helm:
-      releaseName: echo-pi-wait-for-compute
-      valuesObject:
-        jobAnnotations:
-          argocd.argoproj.io/hook: PreSync
-        waitForApp:
-          appName: compute-pi
-          # FIXME unfortunately, this must be hardcoded (must be same with global target revision).
-          # a better way to handle it is by defining an applicationset
-          targetRevision: af96daf
-  - repoURL: https://github.com/drmalex07/hello-octapus 
     path: deploy/echo-pi
     targetRevision: HEAD
   destination:
