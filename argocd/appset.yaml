@@ -15,14 +15,16 @@ spec:
       - list:
           elements:
           - repoURL: https://github.com/drmalex07/hello-octapus
-            targetRevision: 'd7ee1cf'
+            targetRevision: '517377b'
       - list:
           elements:
           - appName: storage
           - appName: compute-pi
+          - appName: sleep
           - appName: echo-pi
             dependencies:
             - appName: compute-pi
+            - appName: sleep
   template:
     metadata:
       name: '{{.appName}}'
@@ -39,15 +41,16 @@ spec:
             jobAnnotations:
               argocd.argoproj.io/hook: PreSync
               #argocd.argoproj.io/hook-delete-policy: HookSucceeded
+            serviceAccountName: app-reader
             waitForApp:
               targetRevision: {{.targetRevision}}
               apps: {{ .dependencies | default (list) | toJson }}
       - repoURL: '{{.repoURL}}'
         targetRevision: '{{.targetRevision}}'
-        path: 'argocd/apps/{{.appName}}'
+        path: 'deploy/{{.appName}}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: argocd
+        namespace: default
       syncPolicy:
         automated:
           prune: true
