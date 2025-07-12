@@ -40,6 +40,7 @@ tolerations: []
 affinity: {}
 
 waitForApp:
-  appName: app-1
   targetRevision: 'xyz12345'
   timeoutSeconds: 120
+  apps: []
+  #- appName: app-1

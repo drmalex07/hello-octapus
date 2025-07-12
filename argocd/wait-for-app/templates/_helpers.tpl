@@ -67,6 +67,6 @@ Create the name of the service account to use
 Name of the job
 */}}
 {{- define "wait-for-app.jobName" -}}
-{{ printf "%s-%s-%s" (include "wait-for-app.fullname" .) (.Values.waitForApp.appName | trunc 9) (.Values.waitForApp.targetRevision | trunc 7) }}
+{{ printf "%s-%s-%s" (include "wait-for-app.fullname" .) (.Values.waitForApp.apps | toJson | sha1sum | trunc 9) (.Values.waitForApp.targetRevision | trunc 7) }}
 {{- end }}
 
