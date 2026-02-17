@@ -8,7 +8,7 @@ on:
   push:
     branches:
     - 'ci-*'
-    #- github-workflows-example
+    - github-workflows-example
     tags:
     - '1.*'
 
@@ -42,6 +42,8 @@ jobs:
     - run: apt-get --version
     - run: sudo apt-get install jq
     - run: jq --version
+    - run: >-
+        logger -s -p local7.info 'Something happened'
     - name: Dump github context
       # https://docs.github.com/en/actions/learn-github-actions/contexts#example-printing-context-information-to-the-log
       run: |
