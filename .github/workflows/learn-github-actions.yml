@@ -8,14 +8,14 @@ on:
   push:
     branches:
     - 'ci-*'
-    #- github-workflows-example
+    - github-workflows-example
     tags:
     - '1.*'
 
 jobs:
   
   helloworld:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       FOO: bar
     steps:
@@ -26,11 +26,11 @@ jobs:
         submodules: 'true'
         # access token (fine-grained PAT) with (extra) read permissions on private submodules
         token: ${{ secrets.ACCESS_TOKEN }} 
-    - uses: actions/setup-java@v2
+    - uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '21'
         distribution: 'temurin'
-        cache: 'maven'
+        #cache: 'maven'
     - run: ls -hal
     - run: env | sort
     - run: ls -hal scripts
@@ -42,6 +42,8 @@ jobs:
     - run: apt-get --version
     - run: sudo apt-get install jq
     - run: jq --version
+    - run: >-
+        logger -s -p local7.info 'Something happened'
     - name: Dump github context
       # https://docs.github.com/en/actions/learn-github-actions/contexts#example-printing-context-information-to-the-log
       run: |
@@ -61,8 +63,15 @@ jobs:
         { 
            echo '## Foo';
            echo 'something *important* here!';
-           echo "now is: `${now}`";
+           echo "now is: `${NOW}`";
         } >> $GITHUB_STEP_SUMMARY
+    - run: |-
+        { 
+           echo '## Baz';
+           echo 'This is from another step!';
+           echo -e "Java version:\n```$(java -version)```";
+        } >> $GITHUB_STEP_SUMMARY
+
       
     
   # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages
