@@ -56,6 +56,14 @@ jobs:
     - run: >-
         echo "NOW=$(date)" >> $GITHUB_ENV
     - run: echo "NOW=$NOW"
+    # an example of adding step summary in markdown
+    - run: |-
+        { 
+           echo '## Foo';
+           echo 'something *important* here!';
+           echo "now is: `${now}`";
+        } >> $GITHUB_STEP_SUMMARY
+      
     
   # https://docs.github.com/en/actions/publishing-packages/publishing-docker-images#publishing-images-to-docker-hub-and-github-packages
   build_image:
